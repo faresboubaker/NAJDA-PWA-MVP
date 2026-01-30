@@ -39,4 +39,4 @@ Key Objectives:
 
 ## Source Code & Commits
 All commits demonstrate my ownership and development of NAJDA:  
-[GitHub link to this repository]
+[[GitHub link to this repository](https://github.com/faresboubaker/NAJDA-PWA-MVP)]
