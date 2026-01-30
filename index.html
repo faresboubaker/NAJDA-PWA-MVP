@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NAJDA – Emergency & Social Response</title>
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#0d6efd">
+  <style>
+    body {font-family:'Segoe UI',Arial,sans-serif;margin:0;background:#f4f6f9;color:#1f2937;}
+    header{background:linear-gradient(135deg,#0d6efd,#0b5ed7);color:white;padding:70px 20px;text-align:center;}
+    header h1{font-size:46px;margin-bottom:10px;letter-spacing:1px;}
+    header p{font-size:20px;opacity:0.95;}
+    .cta-btn{margin-top:25px;padding:15px 30px;font-size:18px;background:#dc3545;color:white;border:none;border-radius:30px;cursor:pointer;}
+    section{padding:70px 20px;max-width:1150px;margin:auto;}
+    h2{margin-bottom:20px;font-size:32px;}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:22px;}
+    .card{background:white;padding:28px;border-radius:16px;box-shadow:0 10px 25px rgba(0,0,0,0.08);text-align:center;}
+    .emergency button{width:100%;padding:20px;font-size:16px;border:none;border-radius:14px;cursor:pointer;font-weight:600;}
+    .red{background:#dc3545;color:white;}
+    .orange{background:#fd7e14;color:white;}
+    .blue{background:#0d6efd;color:white;}
+    #map{width:100%;height:380px;border-radius:16px;}
+    .status{margin-top:20px;padding:18px;background:#e9f7ef;border-radius:14px;font-size:18px;color:#198754;display:none;}
+    footer{background:#0b1220;color:#9ca3af;text-align:center;padding:35px;}
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>NAJDA</h1>
+  <p>Emergency & Social Response Platform<br><strong>Saving Lives. Connecting Communities.</strong></p>
+  <button class="cta-btn" onclick="reportEmergency()">🚨 Report Emergency (Live GPS)</button>
+</header>
+
+<section>
+  <h2>Select Emergency Type</h2>
+  <div class="grid emergency">
+    <button class="red">❤️ Heart Arrest</button>
+    <button class="red">🩸 Severe Bleeding</button>
+    <button class="orange">🚗 Traffic Accident</button>
+    <button class="orange">🔥 Fire</button>
+    <button class="orange">🌊 Drowning</button>
+    <button class="red">😵 Unconscious Person</button>
+    <button class="red">😮‍💨 Breathing Difficulty</button>
+    <button class="blue">🧓 Lost Elderly</button>
+    <button class="blue">👶 Child in Danger</button>
+    <button class="blue">🏚️ Homeless in Emergency</button>
+  </div>
+</section>
+
+<section>
+  <h2>Live Google Map + GPS</h2>
+  <div id="map"></div>
+  <div id="status" class="status">✅ Help is on the way. Nearby responders have been alerted.</div>
+</section>
+
+<section>
+  <h2>Investor Dashboard (Demo)</h2>
+  <div class="grid">
+    <div class="card"><h3>🚨 Alerts Sent</h3><p id="alerts">0</p></div>
+    <div class="card"><h3>⏱ Avg. Response Time</h3><p id="response">-- min</p></div>
+    <div class="card"><h3>📍 Active Incidents</h3><p id="incidents">0</p></div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 NAJDA — Emergency & Social Response Platform</p>
+  <p>Developed by <strong>Fares Boubaker</strong> — Volunteer Paramedic</p>
+</footer>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+<script>
+let map, marker;
+let alertsCount = 0;
+
+function initMap(lat = 36.7525, lng = 3.0420) {
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat, lng },
+    zoom: 14,
+  });
+  marker = new google.maps.Marker({ position: { lat, lng }, map });
+}
+
+function reportEmergency(){
+  if(navigator.geolocation){
+    navigator.geolocation.getCurrentPosition(pos => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+      initMap(lat,lng);
+      document.getElementById('status').style.display='block';
+      alertsCount++;
+      document.getElementById('alerts').innerText = alertsCount;
+      document.getElementById('incidents').innerText = alertsCount;
+      document.getElementById('response').innerText = Math.floor(Math.random()*4+2)+" min";
+    });
+  }
+}
+
+window.onload = () => initMap();
+
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('sw.js')
+  .then(()=>console.log('Service Worker Registered'))
+  .catch(err=>console.log('SW registration failed:',err));
+}
+</script>
+
+</body>
+</html>
